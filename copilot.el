@@ -17,18 +17,21 @@
   :prefix "copilot-")
 
 (defcustom copilot-idle-delay 0
-  "Time in seconds to wait before starting completion. Complete immediately if set to 0."
+  "Time in seconds to wait before starting completion. Complete immediately
+if set to 0."
   :type 'float
   :group 'copilot)
 
 (defcustom copilot-network-proxy nil
   "Network proxy to use for Copilot. Nil means no proxy.
-Format: '(:host \"127.0.0.1\" :port 80 :username \"username\" :password \"password\")
+
+Format:
+\\='(:host \"127.0.0.1\" :port 80 :username \"username\" :password \"password\")
 Username and password are optional.
 
-If you are using a MITM proxy which intercepts TLS connections, you may need to disable
-TLS verification. This can be done by setting a pair ':rejectUnauthorized :json-false' 
-in the proxy plist. For example:
+If you are using a MITM proxy which intercepts TLS connections, you may need to
+disable TLS verification. This can be done by setting a pair
+\\=':rejectUnauthorized :json-false\\=' in the proxy plist. For example:
 
   (:host \"127.0.0.1\" :port 80 :rejectUnauthorized :json-false)
 "
