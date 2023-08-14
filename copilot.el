@@ -427,7 +427,8 @@ Enabling event logging may slightly affect performance."
     (copilot--dbind (:completionText completion-text :score completion-score) msg
       (with-current-buffer "*copilot-panel*"
         (unless (member (secure-hash 'sha256 completion-text)
-                        (org-map-entries (lambda () (org-entry-get nil "SHA"))))
+                        (when (and (boundp 'org-map-entries) (boundp 'org-entry-get))
+                          (org-map-entries (lambda () (org-entry-get nil "SHA")))))
           (save-excursion
             (goto-char (point-max))
             (insert "* Solution\n"
@@ -438,7 +439,8 @@ Enabling event logging may slightly affect performance."
                     "#+BEGIN_SRC " copilot--panel-lang "\n"
                     completion-text "\n#+END_SRC\n\n")
             (mark-whole-buffer)
-            (org-sort-entries nil ?R nil nil "SCORE"))))))
+            (when (boundp 'org-sort-entries)
+              (org-sort-entries nil ?R nil nil "SCORE")))))))
   (when (eql method 'PanelSolutionsDone)
     (message "Copilot: Finish synthesizing solutions.")
     (display-buffer "*copilot-panel*")
@@ -565,8 +567,8 @@ Use TRANSFORM-FN to transform completion if provided."
       (copilot-clear-overlay t)
       (if (eq major-mode 'vterm-mode)
           (progn
-            (vterm-delete-region start end)
-            (vterm-insert t-completion))
+            (when (fboundp 'vterm-delete-region) (vterm-delete-region start end))
+            (when (fboundp 'vterm-insert) (vterm-insert t-completion)))
         (delete-region start end)
         (insert t-completion))
       ; if it is a partial completion
